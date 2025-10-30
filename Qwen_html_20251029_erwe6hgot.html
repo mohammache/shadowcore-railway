@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مؤسسة الشريف الإدريسي الإعدادية - الجعيدات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --royal-blue: #0d3b66;
+            --royal-blue-dark: #0a2a4d;
+            --gold: #d4af37;
+            --gold-light: #e6c35c;
+            --white: #ffffff;
+            --light-bg: #f8f9fa;
+            --text-dark: #212529;
+            --text-light: #f8f9fa;
+            --shadow: 0 10px 30px rgba(13, 59, 102, 0.25);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, var(--royal-blue) 0%, var(--royal-blue-dark) 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            direction: rtl;
+            line-height: 1.7;
+        }
+
+        .digital-clock {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(13, 59, 102, 0.7);
+            color: var(--gold);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            z-index: 100;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(13, 59, 102, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-3d {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        #logo-canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .school-name {
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .school-name span {
+            display: block;
+            font-size: 1rem;
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+        }
+
+        nav ul li a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        nav ul li a:hover {
+            background: var(--gold);
+            color: var(--royal-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            z-index: 2;
+            color: var(--white);
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            margin-bottom: 25px;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero h1 span {
+            color: var(--gold);
+            display: block;
+            font-size: 2.5rem;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 35px;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.15rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(212, 175, 55, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: var(--transition);
+        }
+
+        .btn:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--royal-blue);
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .moroccan-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .palm-tree {
+            position: absolute;
+            bottom: 0;
+            width: 120px;
+            height: 300px;
+            background: url('image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 300"><path d="M50,0 Q60,50 55,100 Q70,150 60,200 Q80,250 50,300 Q20,250 40,200 Q30,150 45,100 Q40,50 50,0" fill="%232c5aa0" opacity="0.3"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(0 0 10px rgba(44, 90, 160, 0.3));
+        }
+
+        .palm-tree:nth-child(1) {
+            left: 5%;
+            transform: scaleX(-1);
+        }
+
+        .palm-tree:nth-child(2) {
+            right: 8%;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            filter: blur(10px);
+        }
+
+        .cloud:nth-child(3) {
+            top: 15%;
+            right: 10%;
+            width: 80px;
+            height: 40px;
+            animation: float 25s infinite ease-in-out;
+        }
+
+        .cloud:nth-child(4) {
+            top: 25%;
+            left: 15%;
+            width: 120px;
+            height: 60px;
+            animation: float 30s infinite ease-in-out;
+            animation-delay: 5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-20px) translateY(-10px); }
+            50% { transform: translateX(20px) translateY(-15px); }
+            75% { transform: translateX(-10px) translateY(-5px); }
+        }
+
+        section {
+            padding: 100px 10%;
+            background: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.8rem;
+            color: var(--royal-blue);
+            display: inline-block;
+            padding-bottom: 15px;
+            position: relative;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+
+        .section-icon {
+            display: inline-block;
+            margin-left: 15px;
+            color: var(--gold);
+            font-size: 2.2rem;
+        }
+
+        .about-content {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h3 {
+            font-size: 2.2rem;
+            color: var(--royal-blue);
+            margin-bottom: 25px;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+            text-align: justify;
+        }
+
+        .location-info {
+            background: var(--light-bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .location-info h4 {
+            color: var(--royal-blue);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .about-image {
+            flex: 1;
+            height: 500px;
+            background: linear-gradient(45deg, var(--royal-blue), var(--royal-blue-dark));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        #school-building {
+            width: 100%;
+            height: 100%;
+        }
+
+        .admissions {
+            background: linear-gradient(to bottom, var(--light-bg) 0%, var(--white) 100%);
+        }
+
+        .admission-content {
+            display: flex;
+            gap: 50px;
+        }
+
+        .admission-info {
+            flex: 1;
+        }
+
+        .admission-info h3 {
+            font-size: 2rem;
+            color: var(--royal-blue);
+            margin-bottom: 25px;
+        }
+
+        .requirements {
+            margin-top: 30px;
+        }
+
+        .requirement {
+            display: flex;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+        }
+
+        .requirement:hover {
+            transform: translateX(10px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .requirement-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--royal-blue);
+            font-size: 1.4rem;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+
+        .admission-steps {
+            flex: 1;
+            background: var(--royal-blue);
+            color: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .admission-steps h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--gold);
+        }
+
+        .steps-list {
+            counter-reset: step-counter;
+        }
+
+        .step-item {
+            position: relative;
+            padding-right: 50px;
+            margin-bottom: 30px;
+            padding-top: 10px;
+        }
+
+        .step-item::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: var(--gold);
+            color: var(--royal-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 35px;
+            margin-top: 40px;
+        }
+
+        .news-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .news-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 15px 35px rgba(13, 59, 102, 0.3);
+        }
+
+        .news-img {
+            height: 220px;
+            background: linear-gradient(45deg, var(--royal-blue), var(--royal-blue-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 4rem;
+        }
+
+        .news-content {
+            padding: 30px;
+        }
+
+        .news-content h4 {
+            color: var(--royal-blue);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .news-date {
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        .gallery {
+            background: linear-gradient(to bottom, var(--white) 0%, var(--light-bg) 100%);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .gallery-item {
+            height: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background: linear-gradient(to top, rgba(13, 59, 102, 0.9), transparent);
+            color: var(--white);
+            padding: 25px 20px 20px;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .contact-container {
+            display: flex;
+            gap: 50px;
+            margin-top: 50px;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-info h3 {
+            font-size: 2rem;
+            color: var(--royal-blue);
+            margin-bottom: 30px;
+        }
+
+        .contact-details {
+            margin-bottom: 40px;
+        }
+
+        .contact-item {
+            display: flex;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--light-bg);
+            border-radius: 15px;
+            transition: var(--transition);
+        }
+
+        .contact-item:hover {
+            transform: translateX(10px);
+            background: var(--white);
+            box-shadow: 0 5px 15px rgba(13, 59, 102, 0.1);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--royal-blue);
+            font-size: 1.5rem;
+            margin-left: 20px;
+            flex-shrink: 0;
+        }
+
+        .contact-text h4 {
+            margin-bottom: 8px;
+            color: var(--royal-blue);
+            font-size: 1.3rem;
+        }
+
+        .working-hours {
+            background: var(--royal-blue);
+            color: var(--white);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .working-hours h4 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .hours-list {
+            list-style: none;
+        }
+
+        .hours-list li {
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .hours-list li:last-child {
+            border-bottom: none;
+        }
+
+        .contact-form {
+            flex: 1;
+            background: var(--light-bg);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--royal-blue);
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 180px;
+            resize: vertical;
+        }
+
+        footer {
+            background: var(--royal-blue-dark);
+            color: var(--white);
+            padding: 50px 10% 30px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-logo h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .footer-logo span {
+            color: var(--gold);
+        }
+
+        .copyright {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            text-align: center;
+            width: 100%;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 3rem; }
+            .hero h1 span { font-size: 2rem; }
+            .about-content, .admission-content, .contact-container { flex-direction: column; }
+            .about-image { width: 100%; height: 400px; }
+            .admission-steps { width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: block; }
+            nav ul {
+                position: fixed; top: 80px; right: -100%; flex-direction: column;
+                background: var(--royal-blue); width: 80%; height: calc(100vh - 80px);
+                padding: 40px 30px; transition: var(--transition);
+                box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+            }
+            nav ul.active { right: 0; }
+            .hero { padding: 0 5%; text-align: center; }
+            .hero-content { margin: 0 auto; }
+            .cta-buttons { justify-content: center; }
+            .section-title h2 { font-size: 2.2rem; }
+            .news-grid, .gallery-grid { grid-template-columns: 1fr; }
+            .footer-content { flex-direction: column; text-align: center; }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 { font-size: 2.4rem; }
+            .hero h1 span { font-size: 1.8rem; }
+            .btn { padding: 14px 28px; font-size: 1.05rem; }
+            .cta-buttons { flex-direction: column; gap: 15px; }
+            .section-title h2 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="digital-clock" id="digital-clock">00:00:00</div>
+    
+    <header>
+        <div class="logo-container">
+            <div class="logo-3d">
+                <canvas id="logo-canvas"></canvas>
+            </div>
+            <div class="school-name">
+                مؤسسة الشريف الإدريسي الإعدادية
+                <span>الجعيدات - إقليم الرحامنة</span>
+            </div>
+        </div>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="#about">🏫 عن المؤسسة</a></li>
+                <li><a href="#admissions">🎓 التسجيل والقبول</a></li>
+                <li><a href="#news">🗓️ الأخبار والأنشطة</a></li>
+                <li><a href="#gallery">🖼️ المعرض</a></li>
+                <li><a href="#contact">📞 اتصل بنا</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="moroccan-bg">
+            <div class="palm-tree"></div>
+            <div class="palm-tree"></div>
+            <div class="cloud"></div>
+            <div class="cloud"></div>
+        </div>
+        <div class="hero-content">
+            <h1>مؤسسة الشريف الإدريسي الإعدادية<span>صرح تعليمي متميز بالجعيدات</span></h1>
+            <p>نسعى لتقديم تعليم عصري يجمع بين الأصالة المغربية والحداثة العالمية، في بيئة تعليمية محفزة على الإبداع والابتكار</p>
+            <div class="cta-buttons">
+                <a href="#admissions" class="btn btn-primary">سجل الآن</a>
+                <a href="#contact" class="btn btn-secondary">اتصل بنا</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="section-title">
+            <h2>عن المؤسسة <i class="fas fa-school section-icon"></i></h2>
+        </div>
+        <div class="about-content">
+            <div class="about-text">
+                <h3>صرح تعليمي في قلب الجعيدات</h3>
+                <p>تُعد مؤسسة الشريف الإدريسي الإعدادية من المؤسسات التعليمية الرائدة في إقليم الرحامنة، حيث تأسست عام 1425ه بهدف تقديم تعليم ذي جودة عالية يجمع بين الأصالة المغربية والحداثة العالمية.</p>
+                <p>تتميز المؤسسة بموقعها الاستراتيجي في الجعيدات، إقليم الرحامنة، جهة مراكش آسفي، حيث تحيط بها المناظر الطبيعية الخلابة التي تخلق بيئة تعليمية محفزة للطلاب على التعلم والابتكار.</p>
+                <p>نسعى في مؤسستنا إلى تنمية مهارات الطلاب وتعزيز قدراتهم العقلية والجسدية والروحية، وفق منهجية تعليمية حديثة تركز على الإبداع وحل المشكلات وتنمية روح المبادرة.</p>
+                
+                <div class="location-info">
+                    <h4>الموقع الجغرافي</h4>
+                    <p>الجعيدات، إقليم الرحامنة، جهة مراكش آسفي، المملكة المغربية</p>
+                    <p>تقع المؤسسة في قلب الجماعة القروية الجعيدات، على بعد 45 كيلومترًا جنوب شرق مدينة مراكش.</p>
+                </div>
+            </div>
+            <div class="about-image">
+                <canvas id="school-building"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <section id="admissions" class="admissions">
+        <div class="section-title">
+            <h2>التسجيل والقبول <i class="fas fa-user-graduate section-icon"></i></h2>
+        </div>
+        <div class="admission-content">
+            <div class="admission-info">
+                <h3>شروط القبول والتسجيل</h3>
+                <p>تستقبل مؤسسة الشريف الإدريسي الإعدادية التلاميذ الجدد وفق الشروط التالية:</p>
+                
+                <div class="requirements">
+                    <div class="requirement">
+                        <div class="requirement-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div>
+                            <h4>شهادة نهاية التعليم الابتدائي</h4>
+                            <p>نسخة مصادق عليها من شهادة نهاية التعليم الابتدائي</p>
+                        </div>
+                    </div>
+                    
+                    <div class="requirement">
+                        <div class="requirement-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div>
+                            <h4>نسخة من البطاقة الوطنية</h4>
+                            <p>نسخة من البطاقة الوطنية للتلميذ أو شهادة الميلاد</p>
+                        </div>
+                    </div>
+                    
+                    <div class="requirement">
+                        <div class="requirement-icon">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div>
+                            <h4>شهادة طبية</h4>
+                            <p>شهادة طبية تثبت اللياقة الصحية للتلميذ</p>
+                        </div>
+                    </div>
+                    
+                    <div class="requirement">
+                        <div class="requirement-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <div>
+                            <h4>صور شخصية</h4>
+                            <p>أربع صور شخصية حديثة ذات خلفية بيضاء</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admission-steps">
+                <h3>خطوات التسجيل</h3>
+                <div class="steps-list">
+                    <div class="step-item">
+                        <h4>تقديم الملف</h4>
+                        <p>تقديم الملف الكامل للتسجيل في مكتب الإدارة خلال الفترة المحددة</p>
+                    </div>
+                    <div class="step-item">
+                        <h4>اختبار القبول</h4>
+                        <p>اجتياز اختبار القبول في المواد الأساسية وفق المستوى الدراسي</p>
+                    </div>
+                    <div class="step-item">
+                        <h4>المقابلة</h4>
+                        <p>إجراء مقابلة شخصية مع التلميذ وأولياء الأمور</p>
+                    </div>
+                    <div class="step-item">
+                        <h4>التسجيل النهائي</h4>
+                        <p>استكمال الإجراءات ودفع الرسوم للحصول على القبول النهائي</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="news">
+        <div class="section-title">
+            <h2>الأخبار والأنشطة <i class="fas fa-calendar-alt section-icon"></i></h2>
+        </div>
+        <div class="news-grid">
+            <div class="news-card">
+                <div class="news-img">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <div class="news-content">
+                    <span class="news-date">28 أكتوبر 2025</span>
+                    <h4>انطلاق معرض العلوم والابتكار</h4>
+                    <p>تنطلق فعاليات معرض العلوم والابتكار بمشاركة تلاميذ المؤسسة في عرض مشاريعهم العلمية المبتكرة.</p>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-img">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="news-content">
+                    <span class="news-date">22 أكتوبر 2025</span>
+                    <h4>فوز فريق المؤسسة في مسابقة الروبوت</h4>
+                    <p>حقق فريق المؤسسة المركز الأول في مسابقة الروبوت على مستوى الجهة بفضل مهاراتهم التقنية المتميزة.</p>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-img">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="news-content">
+                    <span class="news-date">15 أكتوبر 2025</span>
+                    <h4>ورشة عمل حول التفكير النقدي</h4>
+                    <p>نظمت المؤسسة ورشة عمل متخصصة للتلاميذ حول مهارات التفكير النقدي وحل المشكلات المعقدة.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="gallery">
+        <div class="section-title">
+            <h2>المعرض <i class="fas fa-images section-icon"></i></h2>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="المبنى الرئيسي">
+                <div class="gallery-overlay">
+                    <h4>المبنى الرئيسي</h4>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="المختبر العلمي">
+                <div class="gallery-overlay">
+                    <h4>المختبر العلمي</h4>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="المكتبة">
+                <div class="gallery-overlay">
+                    <h4>المكتبة الحديثة</h4>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1523237173600-f8c8c9f8c8c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="الأنشطة الرياضية">
+                <div class="gallery-overlay">
+                    <h4>الأنشطة الرياضية</h4>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="الفنون التشكيلية">
+                <div class="gallery-overlay">
+                    <h4>الفنون التشكيلية</h4>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="الحفلات المدرسية">
+                <div class="gallery-overlay">
+                    <h4>الحفلات المدرسية</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="section-title">
+            <h2>اتصل بنا <i class="fas fa-phone-alt section-icon"></i></h2>
+        </div>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>معلومات التواصل</h3>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>العنوان</h4>
+                            <p>الجعيدات، إقليم الرحامنة، جهة مراكش آسفي، المملكة المغربية</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>الهاتف</h4>
+                            <p>+212 524 123 456</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>البريد الإلكتروني</h4>
+                            <p>contact@alidrissi.ma</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="working-hours">
+                    <h4>ساعات العمل</h4>
+                    <ul class="hours-list">
+                        <li>الاثنين إلى السبت: 8:00 صباحاً - 4:00 مساءً</li>
+                        <li>الأحد: إجازة</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">الاسم الكامل</label>
+                        <input type="text" id="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">البريد الإلكتروني</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">رقم الهاتف</label>
+                        <input type="tel" id="phone" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">الموضوع</label>
+                        <input type="text" id="subject" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">الرسالة</label>
+                        <textarea id="message" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">إرسال الرسالة</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h3>مؤسسة الشريف الإدريسي<span>الإعدادية</span></h3>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 جميع الحقوق محفوظة لمؤسسة الشريف الإدريسي الإعدادية - الجعيدات</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('digital-clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+        
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navMenu.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+        document.querySelectorAll('#nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('تم إرسال رسالتك بنجاح! سنقوم بالرد عليك في أقرب وقت ممكن.');
+                contactForm.reset();
+            });
+        }
+        
+        function initLogo3D() {
+            const canvas = document.getElementById('logo-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            const geometry = new THREE.SphereGeometry(1, 32, 32);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0xd4af37,
+                shininess: 100,
+                emissive: 0x0d3b66,
+                emissiveIntensity: 0.2
+            });
+            const sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+            
+            const canvas2D = document.createElement('canvas');
+            canvas2D.width = 512;
+            canvas2D.height = 512;
+            const ctx = canvas2D.getContext('2d');
+            ctx.fillStyle = 'rgba(13, 59, 102, 0.8)';
+            ctx.beginPath();
+            for (let i = 0; i < 8; i++) {
+                ctx.moveTo(256, 256);
+                ctx.lineTo(256 + 200 * Math.cos(i * Math.PI / 4), 256 + 200 * Math.sin(i * Math.PI / 4));
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.9)';
+            ctx.lineWidth = 8;
+            ctx.stroke();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+            ctx.font = 'bold 40px Tajawal';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('الإدريسي', 256, 350);
+            
+            const texture = new THREE.CanvasTexture(canvas2D);
+            const emblemMaterial = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+            const emblem = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 1.8), emblemMaterial);
+            emblem.rotation.x = Math.PI / 2;
+            scene.add(emblem);
+            
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+            camera.position.z = 3;
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                sphere.rotation.y += 0.01;
+                emblem.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+        }
+        
+        function initSchoolBuilding() {
+            const canvas = document.getElementById('school-building');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setClearColor(0x000000, 0);
+            
+            const buildingGroup = new THREE.Group();
+            const mainBuilding = new THREE.Mesh(new THREE.BoxGeometry(4, 3, 2), new THREE.MeshPhongMaterial({ color: 0x0d3b66 }));
+            buildingGroup.add(mainBuilding);
+            
+            const roofGeometry = new THREE.ConeGeometry(2.5, 0.8, 8);
+            const roofMaterial = new THREE.MeshPhongMaterial({ color: 0xd4af37 });
+            const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+            roof.position.y = 1.9;
+            buildingGroup.add(roof);
+            
+            const windowMaterial = new THREE.MeshPhongMaterial({ color: 0xadd8e6 });
+            for (let i = -1; i <= 1; i += 2) {
+                for (let j = -0.5; j <= 0.5; j += 1) {
+                    const windowGroup = new THREE.Group();
+                    const archCurve = new THREE.EllipseCurve(0, 0, 0.3, 0.4, 0, Math.PI, false, 0);
+                    const archPoints = archCurve.getPoints(50);
+                    const archGeometry = new THREE.LatheGeometry(archPoints);
+                    const arch = new THREE.Mesh(archGeometry, windowMaterial);
+                    arch.position.set(i, j, 1.01);
+                    arch.scale.set(0.3, 0.3, 0.1);
+                    windowGroup.add(arch);
+                    buildingGroup.add(windowGroup);
+                }
+            }
+            
+            const doorGroup = new THREE.Group();
+            const door = new THREE.Mesh(new THREE.BoxGeometry(1, 1.8, 0.1), new THREE.MeshPhongMaterial({ color: 0x8b4513 }));
+            door.position.z = 1.01;
+            doorGroup.add(door);
+            const doorKnob = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), new THREE.MeshPhongMaterial({ color: 0xd4af37 }));
+            doorKnob.position.set(0.4, -0.3, 1.02);
+            doorGroup.add(doorKnob);
+            buildingGroup.add(doorGroup);
+            scene.add(buildingGroup);
+            
+            const students = [];
+            const studentGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+            const studentMaterial = new THREE.MeshPhongMaterial({ color: 0x2c5aa0 });
+            for (let i = 0; i < 6; i++) {
+                const student = new THREE.Mesh(studentGeometry, studentMaterial);
+                student.position.set(-3 + Math.random() * 6, -1.5, -2 + Math.random() * 2);
+                student.userData.speed = 0.02 + Math.random() * 0.03;
+                student.userData.direction = Math.random() > 0.5 ? 1 : -1;
+                scene.add(student);
+                students.push(student);
+            }
+            
+            const teacherGeometry = new THREE.SphereGeometry(0.18, 16, 16);
+            const teacherMaterial = new THREE.MeshPhongMaterial({ color: 0xd4af37 });
+            for (let i = 0; i < 3; i++) {
+                const teacher = new THREE.Mesh(teacherGeometry, teacherMaterial);
+                teacher.position.set(-2 + Math.random() * 4, -1.5, -1.5 + Math.random() * 1);
+                teacher.userData.speed = 0.01 + Math.random() * 0.02;
+                teacher.userData.direction = Math.random() > 0.5 ? 1 : -1;
+                scene.add(teacher);
+                students.push(teacher);
+            }
+            
+            const palmGeometry = new THREE.CylinderGeometry(0.1, 0.05, 2, 8);
+            const palmMaterial = new THREE.MeshPhongMaterial({ color: 0x228B22 });
+            for (let i = 0; i < 4; i++) {
+                const palm = new THREE.Mesh(palmGeometry, palmMaterial);
+                palm.position.set(-5 + i * 3, -2, -4);
+                palm.rotation.z = Math.PI / 6;
+                scene.add(palm);
+            }
+            
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+            camera.position.set(0, 0, 8);
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                buildingGroup.rotation.y += 0.002;
+                students.forEach(person => {
+                    person.position.x += person.userData.speed * person.userData.direction;
+                    if (person.position.x > 3 || person.position.x < -3) {
+                        person.userData.direction *= -1;
+                    }
+                });
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+        }
+        
+        window.addEventListener('load', () => {
+            initLogo3D();
+            initSchoolBuilding();
+        });
+    </script>
+</body>
+</html>
